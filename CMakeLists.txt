@@ -43,6 +43,9 @@ add_message_files(
   FILES
   Gripper.msg
   CaptureStatus.msg
+  TeleopStatus.msg
+  LocalizationStatus.msg
+  ArmControlStatus.msg
 )
 
 add_service_files(
