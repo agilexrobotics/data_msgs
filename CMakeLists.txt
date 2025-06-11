@@ -1,108 +1,35 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(data_msgs)
-add_definitions(-w)
-set(USE_NOETIC true)
-
-set(CMAKE_BUILD_TYPE "Release")
-if(USE_NOETIC)
-  set(CMAKE_CXX_FLAGS "-std=c++14")
-else()
-  set(CMAKE_CXX_FLAGS "-std=c++11")
-endif()
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g -pthread")
-
-if(USE_NOETIC)
-  ADD_DEFINITIONS(-D_USENOETIC=\"${USE_NOETIC}\")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release)
 endif()
 
-find_package(catkin REQUIRED COMPONENTS
-  tf
-  roscpp
-  rospy
-  cv_bridge
-  # pcl library
-  pcl_conversions
-  # msgs
-  std_msgs
-  sensor_msgs
-  geometry_msgs
-  nav_msgs
-  message_generation
-  visualization_msgs
-  rosbag
-  )
-find_package(PkgConfig)
-find_package(Boost REQUIRED COMPONENTS timer)
+find_package(ament_cmake REQUIRED)
+# find_package(rosidl_default_generators REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 
-set(lib_DIR /usr/lib/x84_64-linux-gnu)
+rosidl_generate_interfaces(${PROJECT_NAME} "msg/Gripper.msg" "msg/CaptureStatus.msg" "msg/TeleopStatus.msg" "msg/LocalizationStatus.msg" "msg/ArmControlStatus.msg" "srv/CaptureService.srv" DEPENDENCIES std_msgs)
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-link_directories(${lib_DIR})
+ament_export_include_directories(include)
 
-add_message_files(
-  DIRECTORY msg
-  FILES
-  Gripper.msg
-  CaptureStatus.msg
-  TeleopStatus.msg
-  LocalizationStatus.msg
-  ArmControlStatus.msg
-)
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # uncomment the line when a copyright and license is not present in all source files
+  #set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # uncomment the line when this package is not in a git repo
+  #set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
-add_service_files(
-  DIRECTORY srv
-  FILES
-  CaptureService.srv
-)
+ament_package()
 
-generate_messages(
-  DEPENDENCIES
-  geometry_msgs
-  std_msgs
-  nav_msgs
-  sensor_msgs
-)
-
-catkin_package(
-  # INCLUDE_DIRS include
-  DEPENDS PCL EIGEN3 jsoncpp
-  CATKIN_DEPENDS
-  std_msgs
-  nav_msgs
-  geometry_msgs
-  sensor_msgs
-  message_runtime
-  message_generation
-  visualization_msgs
-)
-
-# set(CSF_DIR "/usr/local")
-# include directories
-include_directories(
-	# include
-	${catkin_INCLUDE_DIRS}
-	${PCL_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}
-  ${Jsoncpp_INCLUDE_DIRS}
-)
-
-# link directories
-link_directories(
-	include
-	${PCL_LIBRARY_DIRS}
-  ${OpenCV_LIBRARY_DIRS}
-  ${Jsoncpp_INCLUDE_DIRS}
-)
-
-###########
-## Build ##
-###########
-
-
-#############
-## install ##
-#############
-
-install(DIRECTORY
-  msg
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
