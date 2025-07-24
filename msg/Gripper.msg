@@ -6,3 +6,8 @@ float64 velocity
 bool enable
 bool set_zero
 bool error
+float64 voltage
+float64 driver_temp
+float64 motor_temp
+float64 bus_current
+string status
