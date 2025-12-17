@@ -15,7 +15,15 @@ find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 
-rosidl_generate_interfaces(${PROJECT_NAME} "msg/Gripper.msg" "msg/CaptureStatus.msg" "msg/TeleopStatus.msg" "msg/LocalizationStatus.msg" "msg/ArmControlStatus.msg" "srv/CaptureService.srv" DEPENDENCIES std_msgs)
+rosidl_generate_interfaces(${PROJECT_NAME}
+ "msg/Gripper.msg"
+ "msg/Instruction.msg"
+ "msg/CaptureStatus.msg"
+ "msg/TeleopStatus.msg"
+ "msg/LocalizationStatus.msg"
+ "msg/ArmControlStatus.msg"
+ "srv/CaptureService.srv"
+ DEPENDENCIES std_msgs)
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 ament_export_include_directories(include)
