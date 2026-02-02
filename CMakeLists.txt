@@ -22,6 +22,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
  "msg/TeleopStatus.msg"
  "msg/LocalizationStatus.msg"
  "msg/ArmControlStatus.msg"
+ "msg/Array.msg"
  "srv/CaptureService.srv"
  DEPENDENCIES std_msgs)
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
